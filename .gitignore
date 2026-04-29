@@ -2,3 +2,5 @@
 /.idea/
 /vendor/
 /composer.lock
+/bin/schemas/schema.zip
+/.phpunit.cache/

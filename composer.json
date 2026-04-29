@@ -1,0 +1,47 @@
+{
+    "name": "ux2dev/speedy",
+    "description": "Framework-agnostic PHP SDK for Speedy courier (api.speedy.bg)",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "ext-json": "*",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.0"
+    },
+    "require-dev": {
+        "pestphp/pest": "^4.0",
+        "guzzlehttp/guzzle": "^7.0",
+        "orchestra/testbench": "^10.0"
+    },
+    "suggest": {
+        "guzzlehttp/guzzle": "Supplies PSR-18 client + PSR-17 factories out of the box",
+        "illuminate/support": "Required for the Laravel facade and multi-account manager"
+    },
+    "autoload": {
+        "psr-4": { "Ux2Dev\\Speedy\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Ux2Dev\\Speedy\\Tests\\": "tests/" }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ux2Dev\\Speedy\\Laravel\\SpeedyServiceProvider"
+            ],
+            "aliases": {
+                "Speedy": "Ux2Dev\\Speedy\\Laravel\\Facades\\Speedy"
+            }
+        }
+    },
+    "minimum-stability": "stable",
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "speedy:fetch-schemas": "bash bin/fetch-schemas.sh",
+        "speedy:generate":      "php bin/generate.php"
+    }
+}
