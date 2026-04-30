@@ -127,7 +127,7 @@ Print endpoints currently follow Speedy's documented JSON envelope (`PrintVouche
 
 ## Errors
 
-Successful return paths always carry a "good" Response DTO. When the API responds with a populated `error` field, the transport throws `Ux2Dev\Speedy\Exception\ApiException` with structured fields (`apiCode`, `apiMessage`, `context`, `errorId`, `component`, `httpStatus`, full `body`).
+Successful return paths always carry a "good" Response DTO. When the API responds with a populated `error` field, the transport throws `Ux2Dev\Speedy\Exception\ApiException` with structured fields (`apiCode`, `apiMessage`, `context`, `errorId`, `component`, `httpStatus`). The raw response body is intentionally not retained on the exception — the structured fields cover every documented error attribute, and dropping the body avoids leaking PII or credentials into logs and traces.
 
 | Exception | When |
 |-----------|------|

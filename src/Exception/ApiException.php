@@ -8,7 +8,6 @@ use Throwable;
 
 final class ApiException extends SpeedyException
 {
-    /** @param array<string, mixed> $body */
     public function __construct(
         string $message,
         public readonly ?int $apiCode = null,
@@ -17,7 +16,6 @@ final class ApiException extends SpeedyException
         public readonly ?string $errorId = null,
         public readonly ?string $component = null,
         public readonly ?int $httpStatus = null,
-        public readonly array $body = [],
         ?Throwable $previous = null,
     ) {
         parent::__construct($message, 0, $previous);

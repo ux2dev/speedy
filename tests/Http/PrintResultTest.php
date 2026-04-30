@@ -54,3 +54,19 @@ it('saveTo throws when the destination is not writable', function () {
         restore_error_handler();
     }
 });
+
+it('saveTo refuses stream wrappers', function () {
+    $r = new PrintResult('payload', 'application/pdf', null);
+
+    expect(fn () => $r->saveTo('phar:///tmp/exploit.phar'))
+        ->toThrow(RuntimeException::class, 'stream wrappers');
+    expect(fn () => $r->saveTo('http://attacker.example/upload'))
+        ->toThrow(RuntimeException::class, 'stream wrappers');
+});
+
+it('saveTo refuses paths with null bytes', function () {
+    $r = new PrintResult('payload', 'application/pdf', null);
+
+    expect(fn () => $r->saveTo("/tmp/legit\0/etc/passwd"))
+        ->toThrow(RuntimeException::class, 'null bytes');
+});

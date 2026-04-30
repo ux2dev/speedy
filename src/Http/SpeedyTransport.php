@@ -118,7 +118,6 @@ final class SpeedyTransport
                 errorId: isset($err['id']) ? (string) $err['id'] : null,
                 component: isset($err['component']) ? (string) $err['component'] : null,
                 httpStatus: $status,
-                body: $decoded,
             );
         }
 
