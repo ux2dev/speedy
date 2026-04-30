@@ -623,10 +623,15 @@ function writeFile(string $path, string $contents): void
 function replaceMarkedBlock(string $haystack, string $marker, string $newContent): string
 {
     $pattern = '~// <generated:' . preg_quote($marker, '~') . '>.*?// </generated:' . preg_quote($marker, '~') . '>~s';
+
+    if (! preg_match($pattern, $haystack)) {
+        throw new RuntimeException("Marker pair '{$marker}' not found in target file");
+    }
+
     $replacement = "// <generated:{$marker}>\n{$newContent}\n    // </generated:{$marker}>";
     $out = preg_replace($pattern, $replacement, $haystack, 1);
-    if ($out === null || $out === $haystack) {
-        throw new RuntimeException("Marker pair '{$marker}' not found in target file");
+    if ($out === null) {
+        throw new RuntimeException("Replacement failed for marker '{$marker}'");
     }
     return $out;
 }
