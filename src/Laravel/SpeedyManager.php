@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Ux2Dev\Speedy\Laravel;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\HttpFactory;
-use Psr\Http\Client\ClientInterface;
+use Illuminate\Http\Client\Factory as LaravelHttpFactory;
 use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Ux2Dev\Speedy\Config\SpeedyConfig;
 use Ux2Dev\Speedy\Exception\ConfigurationException;
+use Ux2Dev\Speedy\Laravel\Http\LaravelHttpClient;
 use Ux2Dev\Speedy\Speedy;
 
 final class SpeedyManager
@@ -23,9 +22,9 @@ final class SpeedyManager
     /** @param array<string, mixed> $config */
     public function __construct(
         private readonly array $config,
-        private readonly ?ClientInterface $httpClient = null,
-        private readonly ?RequestFactoryInterface $requestFactory = null,
-        private readonly ?StreamFactoryInterface $streamFactory = null,
+        private readonly LaravelHttpFactory $httpFactory,
+        private readonly RequestFactoryInterface $requestFactory,
+        private readonly StreamFactoryInterface $streamFactory,
     ) {
         $this->currentAccount = (string) ($config['default'] ?? 'main');
     }
@@ -63,22 +62,23 @@ final class SpeedyManager
 
         $c = $accounts[$account];
 
-        $config = new SpeedyConfig(
-            baseUrl:        (string) ($c['base_url'] ?? 'https://api.speedy.bg/v1'),
-            userName:       (string) ($c['user_name'] ?? ''),
-            password:       (string) ($c['password'] ?? ''),
-            language:       isset($c['language']) ? (string) $c['language'] : null,
-            clientSystemId: isset($c['client_system_id']) ? (int) $c['client_system_id'] : null,
-            timeout:        (int) ($c['timeout'] ?? 30),
-        );
+        $additionalAllowedHosts = (array) ($c['additional_allowed_hosts'] ?? []);
 
-        $factory = new HttpFactory();
+        $config = new SpeedyConfig(
+            baseUrl:                 (string) ($c['base_url'] ?? 'https://api.speedy.bg/v1'),
+            userName:                (string) ($c['user_name'] ?? ''),
+            password:                (string) ($c['password'] ?? ''),
+            language:                isset($c['language']) ? (string) $c['language'] : null,
+            clientSystemId:          isset($c['client_system_id']) ? (int) $c['client_system_id'] : null,
+            timeout:                 (int) ($c['timeout'] ?? 30),
+            additionalAllowedHosts:  array_values(array_map('strval', $additionalAllowedHosts)),
+        );
 
         return new Speedy(
             $config,
-            $this->httpClient ?? new Client(['timeout' => $config->timeout]),
-            $this->requestFactory ?? $factory,
-            $this->streamFactory ?? $factory,
+            new LaravelHttpClient($this->httpFactory, $config->timeout),
+            $this->requestFactory,
+            $this->streamFactory,
         );
     }
 }

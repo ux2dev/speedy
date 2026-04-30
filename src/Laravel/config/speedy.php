@@ -15,6 +15,10 @@ return [
                 ? null
                 : (int) env('SPEEDY_CLIENT_SYSTEM_ID'),
             'timeout'          => (int) env('SPEEDY_TIMEOUT', 30),
+
+            // Extra hostnames allowed for base_url beyond api.speedy.bg + local dev hosts.
+            // Use only if Speedy gives you a non-canonical endpoint (sandbox, partner, etc.).
+            'additional_allowed_hosts' => array_filter(explode(',', (string) env('SPEEDY_ALLOWED_HOSTS', ''))),
         ],
     ],
 
