@@ -21,7 +21,10 @@ final class Speedy
 
     // <generated:properties>
     private ?\Ux2Dev\Speedy\Resources\Calculate $calculate = null;
+    private ?\Ux2Dev\Speedy\Resources\Clients $clients = null;
     private ?\Ux2Dev\Speedy\Resources\Location $location = null;
+    private ?\Ux2Dev\Speedy\Resources\Payments $payments = null;
+    private ?\Ux2Dev\Speedy\Resources\Pickup $pickup = null;
     private ?\Ux2Dev\Speedy\Resources\PrintService $print = null;
     private ?\Ux2Dev\Speedy\Resources\Services $services = null;
     private ?\Ux2Dev\Speedy\Resources\Shipment $shipment = null;
@@ -44,9 +47,24 @@ final class Speedy
         return $this->calculate ??= new \Ux2Dev\Speedy\Resources\Calculate($this->transport);
     }
 
+    public function clients(): \Ux2Dev\Speedy\Resources\Clients
+    {
+        return $this->clients ??= new \Ux2Dev\Speedy\Resources\Clients($this->transport);
+    }
+
     public function location(): \Ux2Dev\Speedy\Resources\Location
     {
         return $this->location ??= new \Ux2Dev\Speedy\Resources\Location($this->transport);
+    }
+
+    public function payments(): \Ux2Dev\Speedy\Resources\Payments
+    {
+        return $this->payments ??= new \Ux2Dev\Speedy\Resources\Payments($this->transport);
+    }
+
+    public function pickup(): \Ux2Dev\Speedy\Resources\Pickup
+    {
+        return $this->pickup ??= new \Ux2Dev\Speedy\Resources\Pickup($this->transport);
     }
 
     public function print(): \Ux2Dev\Speedy\Resources\PrintService

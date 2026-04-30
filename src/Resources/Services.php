@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Ux2Dev\Speedy\Resources;
 
 use Ux2Dev\Speedy\Dto\Request\Services\DestinationServicesRequest;
+use Ux2Dev\Speedy\Dto\Request\Services\ServicesRequest;
 use Ux2Dev\Speedy\Dto\Response\Services\DestinationServicesResponse;
+use Ux2Dev\Speedy\Dto\Response\Services\ServicesResponse;
 use Ux2Dev\Speedy\Resources\Resource;
 
 final class Services extends Resource
@@ -17,5 +19,14 @@ final class Services extends Resource
         if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
 
         return $this->transport->postJson('/services/destination', $body, DestinationServicesResponse::class);
+    }
+
+    public function services(ServicesRequest $request, ?string $language = null, ?int $clientSystemId = null): ServicesResponse
+    {
+        $body = $request->toArray();
+        if ($language !== null) $body['language'] = $language;
+        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
+
+        return $this->transport->postJson('/services', $body, ServicesResponse::class);
     }
 }

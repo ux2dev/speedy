@@ -1,92 +1,56 @@
 [
-  {
-    "group":    "Shipment",
-    "name":     "create",
-    "method":   "POST",
-    "path":     "/shipment",
-    "request":  "CreateShipmentRequest",
-    "response": "CreateShipmentResponse",
-    "returns":  "json"
-  },
-  {
-    "group":    "Shipment",
-    "name":     "cancel",
-    "method":   "POST",
-    "path":     "/shipment/cancel",
-    "request":  "CancelShipmentRequest",
-    "response": "CancelShipmentResponse",
-    "returns":  "json"
-  },
-  {
-    "group":    "Shipment",
-    "name":     "info",
-    "method":   "POST",
-    "path":     "/shipment/info",
-    "request":  "ShipmentInformationRequest",
-    "response": "ShipmentInformationResponse",
-    "returns":  "json"
-  },
-  {
-    "group":    "Track",
-    "name":     "track",
-    "method":   "POST",
-    "path":     "/track",
-    "request":  "TrackRequest",
-    "response": "TrackResponse",
-    "returns":  "json"
-  },
-  {
-    "group":    "Location",
-    "name":     "findCountry",
-    "method":   "POST",
-    "path":     "/location/country",
-    "request":  "FindCountryRequest",
-    "response": "FindCountryResponse",
-    "returns":  "json"
-  },
-  {
-    "group":    "Location",
-    "name":     "findOffice",
-    "method":   "POST",
-    "path":     "/location/office",
-    "request":  "FindOfficeRequest",
-    "response": "FindOfficeResponse",
-    "returns":  "json"
-  },
-  {
-    "group":    "Calculate",
-    "name":     "calculate",
-    "method":   "POST",
-    "path":     "/calculate",
-    "request":  "CalculationRequest",
-    "response": "CalculationResponse",
-    "returns":  "json"
-  },
-  {
-    "group":    "Validation",
-    "name":     "validateAddress",
-    "method":   "POST",
-    "path":     "/validation/address",
-    "request":  "ValidateAddressRequest",
-    "response": "ValidationResponse",
-    "returns":  "json"
-  },
-  {
-    "group":    "PrintService",
-    "name":     "voucher",
-    "method":   "POST",
-    "path":     "/print",
-    "request":  "PrintVoucherRequest",
-    "response": null,
-    "returns":  "bytes"
-  },
-  {
-    "group":    "Services",
-    "name":     "destinationServices",
-    "method":   "POST",
-    "path":     "/services/destination",
-    "request":  "DestinationServicesRequest",
-    "response": "DestinationServicesResponse",
-    "returns":  "json"
-  }
+  { "group": "Shipment",     "name": "create",                  "method": "POST", "path": "/shipment",                            "request": "CreateShipmentRequest",          "response": "CreateShipmentResponse",          "returns": "json" },
+  { "group": "Shipment",     "name": "cancel",                  "method": "POST", "path": "/shipment/cancel",                     "request": "CancelShipmentRequest",          "response": "CancelShipmentResponse",          "returns": "json" },
+  { "group": "Shipment",     "name": "addParcel",               "method": "POST", "path": "/shipment/add_parcel",                 "request": "AddParcelRequest",               "response": "AddParcelResponse",               "returns": "json" },
+  { "group": "Shipment",     "name": "finalize",                "method": "POST", "path": "/shipment/finalize",                   "request": "FinalizePendingShipmentRequest", "response": "FinalizePendingShipmentResponse", "returns": "json" },
+  { "group": "Shipment",     "name": "info",                    "method": "POST", "path": "/shipment/info",                       "request": "ShipmentInformationRequest",     "response": "ShipmentInformationResponse",     "returns": "json" },
+  { "group": "Shipment",     "name": "secondary",               "method": "POST", "path": "/shipment/secondary",                  "request": "SecondaryShipmentsRequest",      "response": "SecondaryShipmentsResponse",      "returns": "json" },
+  { "group": "Shipment",     "name": "update",                  "method": "POST", "path": "/shipment/update",                     "request": "UpdateShipmentRequest",          "response": "UpdateShipmentResponse",          "returns": "json" },
+  { "group": "Shipment",     "name": "updateProperties",        "method": "POST", "path": "/shipment/update/properties",          "request": "UpdateShipmentPropertiesRequest","response": "UpdateShipmentResponse",          "returns": "json" },
+  { "group": "Shipment",     "name": "search",                  "method": "POST", "path": "/shipment/search",                     "request": "FindParcelsByRefRequest",        "response": "FindParcelsByRefResponse",        "returns": "json" },
+  { "group": "Shipment",     "name": "handover",                "method": "POST", "path": "/shipment/handover",                   "request": "HandOverToCourierRequest",       "response": "HandOverToCourierResponse",       "returns": "json" },
+  { "group": "Shipment",     "name": "handoverToMidwayCarrier", "method": "POST", "path": "/shipment/handover-to-midway-carrier", "request": "HandOverToMidwayCarrierRequest", "response": "HandOverToMidwayCarrierResponse", "returns": "json" },
+  { "group": "Shipment",     "name": "barcodeInformation",      "method": "POST", "path": "/shipment/barcode-information",        "request": "BarcodeInformationRequest",      "response": "BarcodeInformationResponse",      "returns": "json" },
+
+  { "group": "PrintService", "name": "voucher",                 "method": "POST", "path": "/print",                               "request": "PrintVoucherRequest",            "response": "PrintVoucherResponse",            "returns": "json" },
+  { "group": "PrintService", "name": "extended",                "method": "POST", "path": "/print/extended",                      "request": "PrintRequest",                   "response": "ExtendedPrintResponse",           "returns": "json" },
+  { "group": "PrintService", "name": "labelInfo",               "method": "POST", "path": "/print/labelInfo",                     "request": "LabelInfoRequest",               "response": "LabelInfoResponse",               "returns": "json" },
+
+  { "group": "Track",        "name": "track",                   "method": "POST", "path": "/track",                               "request": "TrackRequest",                   "response": "TrackResponse",                   "returns": "json" },
+  { "group": "Track",        "name": "bulkFiles",               "method": "POST", "path": "/track/bulk",                          "request": "BulkTrackingDataFilesRequest",   "response": "BulkTrackingDataFilesResponse",   "returns": "json" },
+
+  { "group": "Pickup",       "name": "terms",                   "method": "POST", "path": "/pickup/terms",                        "request": "PickupTermsRequest",             "response": "PickupTermsResponse",             "returns": "json" },
+  { "group": "Pickup",       "name": "request",                 "method": "POST", "path": "/pickup",                              "request": "PickupRequest",                  "response": "PickupResponse",                  "returns": "json" },
+
+  { "group": "Location",     "name": "findCountry",             "method": "POST", "path": "/location/country",                    "request": "FindCountryRequest",             "response": "FindCountryResponse",             "returns": "json" },
+  { "group": "Location",     "name": "getCountry",              "method": "POST", "path": "/location/country/getById",            "request": "GetCountryRequest",              "response": "GetCountryResponse",              "returns": "json" },
+  { "group": "Location",     "name": "getAllCountries",         "method": "POST", "path": "/location/country/getAll",             "request": "GetAllCountriesRequest",         "response": "FindCountryResponse",             "returns": "json" },
+  { "group": "Location",     "name": "findSite",                "method": "POST", "path": "/location/site",                       "request": "FindSiteRequest",                "response": "FindSiteResponse",                "returns": "json" },
+  { "group": "Location",     "name": "getSite",                 "method": "POST", "path": "/location/site/getById",               "request": "GetSiteRequest",                 "response": "GetSiteResponse",                 "returns": "json" },
+  { "group": "Location",     "name": "getAllSites",             "method": "POST", "path": "/location/site/getAll",                "request": "GetAllSitesRequest",             "response": "FindSiteResponse",                "returns": "json" },
+  { "group": "Location",     "name": "findStreet",              "method": "POST", "path": "/location/street",                     "request": "FindStreetRequest",              "response": "FindStreetResponse",              "returns": "json" },
+  { "group": "Location",     "name": "getStreet",               "method": "POST", "path": "/location/street/getById",             "request": "GetStreetRequest",               "response": "GetStreetResponse",               "returns": "json" },
+  { "group": "Location",     "name": "getAllStreets",           "method": "POST", "path": "/location/street/getAll",              "request": "GetAllStreetsRequest",           "response": "FindStreetResponse",              "returns": "json" },
+  { "group": "Location",     "name": "findOffice",              "method": "POST", "path": "/location/office",                     "request": "FindOfficeRequest",              "response": "FindOfficeResponse",              "returns": "json" },
+  { "group": "Location",     "name": "findNearestOffices",      "method": "POST", "path": "/location/office/nearest",             "request": "FindNearestOfficesRequest",      "response": "FindNearestOfficesResponse",      "returns": "json" },
+  { "group": "Location",     "name": "getOffice",               "method": "POST", "path": "/location/office/getById",             "request": "GetOfficeRequest",               "response": "GetOfficeResponse",               "returns": "json" },
+  { "group": "Location",     "name": "searchAddress",           "method": "POST", "path": "/location/address",                    "request": "SearchAddressRequest",           "response": "SearchAddressResponse",           "returns": "json" },
+
+  { "group": "Calculate",    "name": "calculate",               "method": "POST", "path": "/calculate",                           "request": "CalculationRequest",             "response": "CalculationResponse",             "returns": "json" },
+
+  { "group": "Clients",      "name": "getOwnClientId",          "method": "POST", "path": "/client",                              "request": "GetOwnClientIdRequest",          "response": "GetOwnClientIdResponse",          "returns": "json" },
+  { "group": "Clients",      "name": "getClient",               "method": "POST", "path": "/client/getById",                      "request": "GetClientRequest",               "response": "GetClientResponse",               "returns": "json" },
+  { "group": "Clients",      "name": "getContractClients",      "method": "POST", "path": "/client/contract",                     "request": "GetContractClientsRequest",      "response": "GetContractClientsResponse",      "returns": "json" },
+  { "group": "Clients",      "name": "createContact",           "method": "POST", "path": "/client/contact",                      "request": "CreateContactRequest",           "response": "CreateContactResponse",           "returns": "json" },
+  { "group": "Clients",      "name": "getContactByExternalId",  "method": "POST", "path": "/client/contact/getByExternalId",      "request": "GetContactByExternalIdRequest",  "response": "GetContactByExternalIdResponse",  "returns": "json" },
+  { "group": "Clients",      "name": "contractInfo",            "method": "POST", "path": "/client/contractInfo",                 "request": "ContractInfoRequest",            "response": "ContractInfo",                    "returns": "json" },
+
+  { "group": "Validation",   "name": "validateAddress",         "method": "POST", "path": "/validation/address",                  "request": "ValidateAddressRequest",         "response": "ValidationResponse",              "returns": "json" },
+  { "group": "Validation",   "name": "validatePostCode",        "method": "POST", "path": "/validation/postCode",                 "request": "ValidatePostCodeRequest",        "response": "ValidationResponse",              "returns": "json" },
+  { "group": "Validation",   "name": "validatePhone",           "method": "POST", "path": "/validation/phone",                    "request": "ValidatePhoneRequest",           "response": "ValidationResponse",              "returns": "json" },
+
+  { "group": "Services",     "name": "destinationServices",     "method": "POST", "path": "/services/destination",                "request": "DestinationServicesRequest",     "response": "DestinationServicesResponse",     "returns": "json" },
+  { "group": "Services",     "name": "services",                "method": "POST", "path": "/services",                            "request": "ServicesRequest",                "response": "ServicesResponse",                "returns": "json" },
+
+  { "group": "Payments",     "name": "payouts",                 "method": "POST", "path": "/payments",                            "request": "PayoutRequest",                  "response": "Payout",                          "returns": "json" }
 ]
