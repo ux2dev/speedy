@@ -1,0 +1,92 @@
+[
+  {
+    "group":    "Shipment",
+    "name":     "create",
+    "method":   "POST",
+    "path":     "/shipment",
+    "request":  "CreateShipmentRequest",
+    "response": "CreateShipmentResponse",
+    "returns":  "json"
+  },
+  {
+    "group":    "Shipment",
+    "name":     "cancel",
+    "method":   "POST",
+    "path":     "/shipment/cancel",
+    "request":  "CancelShipmentRequest",
+    "response": "CancelShipmentResponse",
+    "returns":  "json"
+  },
+  {
+    "group":    "Shipment",
+    "name":     "info",
+    "method":   "POST",
+    "path":     "/shipment/info",
+    "request":  "ShipmentInformationRequest",
+    "response": "ShipmentInformationResponse",
+    "returns":  "json"
+  },
+  {
+    "group":    "Track",
+    "name":     "track",
+    "method":   "POST",
+    "path":     "/track",
+    "request":  "TrackRequest",
+    "response": "TrackResponse",
+    "returns":  "json"
+  },
+  {
+    "group":    "Location",
+    "name":     "findCountry",
+    "method":   "POST",
+    "path":     "/location/country",
+    "request":  "FindCountryRequest",
+    "response": "FindCountryResponse",
+    "returns":  "json"
+  },
+  {
+    "group":    "Location",
+    "name":     "findOffice",
+    "method":   "POST",
+    "path":     "/location/office",
+    "request":  "FindOfficeRequest",
+    "response": "FindOfficeResponse",
+    "returns":  "json"
+  },
+  {
+    "group":    "Calculate",
+    "name":     "calculate",
+    "method":   "POST",
+    "path":     "/calculate",
+    "request":  "CalculationRequest",
+    "response": "CalculationResponse",
+    "returns":  "json"
+  },
+  {
+    "group":    "Validation",
+    "name":     "validateAddress",
+    "method":   "POST",
+    "path":     "/validation/address",
+    "request":  "ValidateAddressRequest",
+    "response": "ValidationResponse",
+    "returns":  "json"
+  },
+  {
+    "group":    "PrintService",
+    "name":     "voucher",
+    "method":   "POST",
+    "path":     "/print",
+    "request":  "PrintVoucherRequest",
+    "response": null,
+    "returns":  "bytes"
+  },
+  {
+    "group":    "Services",
+    "name":     "destinationServices",
+    "method":   "POST",
+    "path":     "/services/destination",
+    "request":  "DestinationServicesRequest",
+    "response": "DestinationServicesResponse",
+    "returns":  "json"
+  }
+]
