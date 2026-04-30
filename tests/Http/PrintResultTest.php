@@ -43,3 +43,14 @@ it('writes bytes to disk via saveTo', function () {
     expect(file_get_contents($path))->toBe('hello bytes');
     unlink($path);
 });
+
+it('saveTo throws when the destination is not writable', function () {
+    $r = new PrintResult('payload', 'application/pdf', null);
+
+    set_error_handler(static fn () => true);
+    try {
+        expect(fn () => $r->saveTo('/dev/null/cannot-write'))->toThrow(RuntimeException::class);
+    } finally {
+        restore_error_handler();
+    }
+});

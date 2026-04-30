@@ -176,3 +176,37 @@ it('deleteJson sends DELETE method', function () {
 
     expect($client->requests[0]->getMethod())->toBe('DELETE');
 });
+
+it('postBinary throws InvalidResponseException on empty body', function () {
+    $client = new FakeHttpClient();
+    $client->queueBinary(200, '', 'application/pdf');
+
+    expect(fn () => makeTransport($client)->postBinary('/print', []))
+        ->toThrow(InvalidResponseException::class);
+});
+
+it('throws InvalidResponseException when JSON decodes to a non-object', function () {
+    $client = new FakeHttpClient();
+    $client->queueRaw(new Response(200, ['Content-Type' => 'application/json'], '"a string"'));
+
+    expect(fn () => makeTransport($client)->postJson('/x', [], FakeResponse::class))
+        ->toThrow(InvalidResponseException::class);
+});
+
+it('injects clientSystemId from config when not in body', function () {
+    $client = new FakeHttpClient();
+    $client->queueJson(200, []);
+
+    makeTransport($client, defaultLanguage: null, defaultClientSystemId: 42)
+        ->postJson('/x', [], FakeResponse::class);
+
+    expect($client->lastRequestBody()['clientSystemId'])->toBe(42);
+});
+
+it('throws InvalidResponseException when the request body cannot be JSON-encoded', function () {
+    $client = new FakeHttpClient();
+
+    // Invalid UTF-8 byte sequence makes json_encode fail under JSON_THROW_ON_ERROR.
+    expect(fn () => makeTransport($client)->postJson('/x', ['junk' => "\xB1\x31"], FakeResponse::class))
+        ->toThrow(InvalidResponseException::class);
+});
