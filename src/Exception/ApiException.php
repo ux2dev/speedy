@@ -11,7 +11,7 @@ final class ApiException extends SpeedyException
     /** @param array<string, mixed> $body */
     public function __construct(
         string $message,
-        public readonly ?int $code = null,
+        public readonly ?int $apiCode = null,
         public readonly ?string $apiMessage = null,
         public readonly ?string $context = null,
         public readonly ?string $errorId = null,
