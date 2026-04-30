@@ -1,0 +1,84 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Ux2Dev\Speedy\Laravel;
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\HttpFactory;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\StreamFactoryInterface;
+use Ux2Dev\Speedy\Config\SpeedyConfig;
+use Ux2Dev\Speedy\Exception\ConfigurationException;
+use Ux2Dev\Speedy\Speedy;
+
+final class SpeedyManager
+{
+    /** @var array<string, Speedy> */
+    private array $instances = [];
+
+    private string $currentAccount;
+
+    /** @param array<string, mixed> $config */
+    public function __construct(
+        private readonly array $config,
+        private readonly ?ClientInterface $httpClient = null,
+        private readonly ?RequestFactoryInterface $requestFactory = null,
+        private readonly ?StreamFactoryInterface $streamFactory = null,
+    ) {
+        $this->currentAccount = (string) ($config['default'] ?? 'main');
+    }
+
+    public function account(string $name): self
+    {
+        $clone = clone $this;
+        $clone->currentAccount = $name;
+        return $clone;
+    }
+
+    public function currentAccount(): string
+    {
+        return $this->currentAccount;
+    }
+
+    public function instance(): Speedy
+    {
+        return $this->instances[$this->currentAccount] ??= $this->build($this->currentAccount);
+    }
+
+    /** @param array<int, mixed> $arguments */
+    public function __call(string $method, array $arguments): mixed
+    {
+        return $this->instance()->{$method}(...$arguments);
+    }
+
+    private function build(string $account): Speedy
+    {
+        $accounts = (array) ($this->config['accounts'] ?? []);
+
+        if (! isset($accounts[$account]) || ! is_array($accounts[$account])) {
+            throw new ConfigurationException("Speedy account \"{$account}\" is not configured");
+        }
+
+        $c = $accounts[$account];
+
+        $config = new SpeedyConfig(
+            baseUrl:        (string) ($c['base_url'] ?? 'https://api.speedy.bg/v1'),
+            userName:       (string) ($c['user_name'] ?? ''),
+            password:       (string) ($c['password'] ?? ''),
+            language:       isset($c['language']) ? (string) $c['language'] : null,
+            clientSystemId: isset($c['client_system_id']) ? (int) $c['client_system_id'] : null,
+            timeout:        (int) ($c['timeout'] ?? 30),
+        );
+
+        $factory = new HttpFactory();
+
+        return new Speedy(
+            $config,
+            $this->httpClient ?? new Client(['timeout' => $config->timeout]),
+            $this->requestFactory ?? $factory,
+            $this->streamFactory ?? $factory,
+        );
+    }
+}
