@@ -1,0 +1,24 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:model:GoodsItem",
+  "properties" : {
+    "description" : {
+      "type" : "string"
+    },
+    "hsCode" : {
+      "type" : "string"
+    },
+    "quantity" : {
+      "type" : "integer"
+    },
+    "valuePerItem" : {
+      "type" : "number"
+    },
+    "weightPerItem" : {
+      "type" : "number"
+    },
+    "originCountryCode" : {
+      "type" : "string"
+    }
+  }
+}

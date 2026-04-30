@@ -1,0 +1,33 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentReturnAdditionalServices",
+  "properties" : {
+    "rod" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentRODAdditionalService"
+    },
+    "returnReceipt" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentReturnReceiptAdditionalService"
+    },
+    "electronicReturnReceipt" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentElectronicReturnReceiptAdditionalService"
+    },
+    "swap" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentSWAPAdditionalService"
+    },
+    "rop" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentROPAdditionalService"
+    },
+    "returnVoucher" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentReturnVoucherAdditionalService"
+    },
+    "sendBackClientId" : {
+      "type" : "integer"
+    }
+  }
+}

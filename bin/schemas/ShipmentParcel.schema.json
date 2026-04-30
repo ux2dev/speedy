@@ -1,0 +1,47 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentParcel",
+  "properties" : {
+    "id" : {
+      "type" : "string"
+    },
+    "seqNo" : {
+      "type" : "integer"
+    },
+    "packageUniqueNumber" : {
+      "type" : "integer"
+    },
+    "size" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentParcelSize"
+    },
+    "weight" : {
+      "type" : "number"
+    },
+    "pickupExternalCarrierParcelNumber" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ExternalCarrierParcelNumber"
+    },
+    "deliveryExternalCarrierParcelNumber" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ExternalCarrierParcelNumber"
+    },
+    "ref1" : {
+      "type" : "string"
+    },
+    "ref2" : {
+      "type" : "string"
+    },
+    "goods" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:GoodsItem"
+      }
+    },
+    "printAdditionalBarcode" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:print:model:ParcelToPrintAdditionalBarcode"
+    }
+  }
+}

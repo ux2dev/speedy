@@ -1,0 +1,18 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:model:TrackShipmentParcelRef",
+  "properties" : {
+    "id" : {
+      "type" : "string"
+    },
+    "externalCarrierParcelNumber" : {
+      "type" : "string"
+    },
+    "ref" : {
+      "type" : "string"
+    },
+    "fullBarcode" : {
+      "type" : "string"
+    }
+  }
+}

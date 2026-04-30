@@ -1,0 +1,19 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:ParcelHandover",
+  "properties" : {
+    "id" : {
+      "type" : "string"
+    },
+    "externalCarrierParcelNumber" : {
+      "type" : "string"
+    },
+    "fullBarcode" : {
+      "type" : "string"
+    },
+    "dateTime" : {
+      "type" : "string",
+      "format" : "date-time"
+    }
+  }
+}

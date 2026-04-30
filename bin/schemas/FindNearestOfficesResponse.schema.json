@@ -1,0 +1,23 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:location:office:FindNearestOfficesResponse",
+  "properties" : {
+    "error" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:Error"
+    },
+    "x" : {
+      "type" : "number"
+    },
+    "y" : {
+      "type" : "number"
+    },
+    "offices" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "$ref" : "urn:jsonschema:com:speedy:api:rest:location:office:OfficeResult"
+      }
+    }
+  }
+}

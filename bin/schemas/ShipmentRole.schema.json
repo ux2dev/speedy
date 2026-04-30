@@ -1,0 +1,4 @@
+{
+  "type" : "string",
+  "enum" : [ "SENDER", "RECIPIENT", "THIRD_PARTY" ]
+}

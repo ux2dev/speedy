@@ -1,0 +1,12 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:model:BankAccount",
+  "properties" : {
+    "iban" : {
+      "type" : "string"
+    },
+    "accountHolder" : {
+      "type" : "string"
+    }
+  }
+}

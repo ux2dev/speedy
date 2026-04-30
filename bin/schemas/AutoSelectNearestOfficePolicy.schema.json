@@ -1,0 +1,14 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:model:AutoSelectNearestOfficePolicy",
+  "properties" : {
+    "unavailableNearestOfficeAction" : {
+      "type" : "string",
+      "enum" : [ "DELIVERY_TO_ADDRESS", "CANCEL_WITH_ERROR", "DELIVERY_TO_SERVING_OFFICE" ]
+    },
+    "officeType" : {
+      "type" : "string",
+      "enum" : [ "OFFICE", "APT" ]
+    }
+  }
+}

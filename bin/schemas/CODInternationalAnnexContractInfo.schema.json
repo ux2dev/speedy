@@ -1,0 +1,12 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:client:CODInternationalAnnexContractInfo",
+  "properties" : {
+    "countryId" : {
+      "type" : "integer"
+    },
+    "countryName" : {
+      "type" : "string"
+    }
+  }
+}

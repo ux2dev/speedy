@@ -1,0 +1,12 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:client:Requirement",
+  "properties" : {
+    "id" : {
+      "type" : "integer"
+    },
+    "text" : {
+      "type" : "string"
+    }
+  }
+}

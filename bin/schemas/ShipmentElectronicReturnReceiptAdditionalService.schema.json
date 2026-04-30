@@ -1,0 +1,21 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentElectronicReturnReceiptAdditionalService",
+  "properties" : {
+    "recipientEmails" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "thirdPartyPayer" : {
+      "type" : "boolean"
+    },
+    "returnToClientId" : {
+      "type" : "integer"
+    },
+    "returnToOfficeId" : {
+      "type" : "integer"
+    }
+  }
+}

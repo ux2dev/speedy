@@ -1,0 +1,18 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentCODFiscalReceiptItem",
+  "properties" : {
+    "description" : {
+      "type" : "string"
+    },
+    "vatGroup" : {
+      "type" : "string"
+    },
+    "amount" : {
+      "type" : "number"
+    },
+    "amountWithVat" : {
+      "type" : "number"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ExternalCarrierParcelNumber",
+  "properties" : {
+    "externalCarrier" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ExternalCarrier"
+    },
+    "parcelNumber" : {
+      "type" : "string"
+    }
+  }
+}

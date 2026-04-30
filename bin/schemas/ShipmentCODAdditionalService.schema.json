@@ -1,0 +1,35 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentCODAdditionalService",
+  "properties" : {
+    "amount" : {
+      "type" : "number"
+    },
+    "currencyCode" : {
+      "type" : "string"
+    },
+    "payoutToThirdParty" : {
+      "type" : "boolean"
+    },
+    "payoutToLoggedClient" : {
+      "type" : "boolean"
+    },
+    "processingType" : {
+      "type" : "string",
+      "enum" : [ "CASH", "POSTAL_MONEY_TRANSFER" ]
+    },
+    "includeShippingPrice" : {
+      "type" : "boolean"
+    },
+    "cardPaymentForbidden" : {
+      "type" : "boolean"
+    },
+    "fiscalReceiptItems" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentCODFiscalReceiptItem"
+      }
+    }
+  }
+}

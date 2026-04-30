@@ -1,0 +1,22 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:client:CODAdditionalServiceContractInfo",
+  "properties" : {
+    "moneyTransferAllowed" : {
+      "type" : "boolean"
+    },
+    "codFiscalReceiptAllowed" : {
+      "type" : "boolean"
+    },
+    "hasCODAnnex" : {
+      "type" : "boolean"
+    },
+    "internationalCODAnnexes" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "$ref" : "urn:jsonschema:com:speedy:api:rest:client:CODInternationalAnnexContractInfo"
+      }
+    }
+  }
+}

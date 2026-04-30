@@ -1,0 +1,39 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:model:BarcodeInformationResponse",
+  "properties" : {
+    "error" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:Error"
+    },
+    "labelInfo" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:print:model:LabelInfo"
+    },
+    "primaryShipment" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:PrimaryShipment"
+    },
+    "primaryParcelId" : {
+      "type" : "string"
+    },
+    "returnShipmentId" : {
+      "type" : "string"
+    },
+    "returnParcelId" : {
+      "type" : "string"
+    },
+    "redirectShipmentId" : {
+      "type" : "string"
+    },
+    "redirectParcelId" : {
+      "type" : "string"
+    },
+    "initialShipmentId" : {
+      "type" : "string"
+    },
+    "initialParcelId" : {
+      "type" : "string"
+    }
+  }
+}

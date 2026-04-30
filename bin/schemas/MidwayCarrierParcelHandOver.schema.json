@@ -1,0 +1,19 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:shipment:MidwayCarrierParcelHandOver",
+  "properties" : {
+    "siteName" : {
+      "type" : "string"
+    },
+    "id" : {
+      "type" : "string"
+    },
+    "dateTime" : {
+      "type" : "integer",
+      "format" : "utc-millisec"
+    },
+    "countryId" : {
+      "type" : "integer"
+    }
+  }
+}

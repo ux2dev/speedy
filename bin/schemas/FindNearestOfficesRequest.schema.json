@@ -1,0 +1,39 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:speedy:api:rest:location:office:FindNearestOfficesRequest",
+  "properties" : {
+    "userName" : {
+      "type" : "string"
+    },
+    "password" : {
+      "type" : "string"
+    },
+    "language" : {
+      "type" : "string"
+    },
+    "clientSystemId" : {
+      "type" : "integer"
+    },
+    "address" : {
+      "type" : "object",
+      "$ref" : "urn:jsonschema:com:speedy:api:rest:shipment:model:ShipmentAddress"
+    },
+    "distance" : {
+      "type" : "integer"
+    },
+    "limit" : {
+      "type" : "integer"
+    },
+    "officeType" : {
+      "type" : "string",
+      "enum" : [ "OFFICE", "APT" ]
+    },
+    "officeFeatures" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "$ref" : "urn:jsonschema:com:speedy:api:rest:location:office:OfficeFeature"
+      }
+    }
+  }
+}
