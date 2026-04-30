@@ -8,8 +8,6 @@ use Ux2Dev\Speedy\Exception\ConfigurationException;
 use Ux2Dev\Speedy\Laravel\SpeedyManager;
 use Ux2Dev\Speedy\Speedy;
 
-uses(TestCase::class);
-
 it('resolves the default account', function () {
     config()->set('speedy.default', 'main');
     config()->set('speedy.accounts.main', [
