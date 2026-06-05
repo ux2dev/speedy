@@ -8,9 +8,23 @@ it('every Model DTO round-trips an empty array', function () {
 
     foreach ($models as $file) {
         $class = 'Ux2Dev\\Speedy\\Dto\\Model\\' . basename($file, '.php');
-        $dto   = $class::fromArray([]);
+
+        // Skip backed-string enums — top-level "type": "string" + "enum" schemas
+        // are emitted as PHP enums, not classes with fromArray/toArray.
+        if (enum_exists($class)) continue;
+
+        $dto = $class::fromArray([]);
         expect($dto)->toBeInstanceOf($class, "fromArray failed for {$class}");
         expect($dto->toArray())->toBeArray("toArray failed for {$class}");
+    }
+});
+
+it('top-level string-enum schemas are emitted as backed enums', function () {
+    foreach (['ShipmentRole', 'CODProcessingType', 'ExternalCarrier', 'PaymentType', 'PrimaryShipmentType'] as $name) {
+        $class = "Ux2Dev\\Speedy\\Dto\\Model\\{$name}";
+        expect(enum_exists($class))->toBeTrue("{$class} should be a backed enum");
+        $reflection = new ReflectionEnum($class);
+        expect((string) $reflection->getBackingType())->toBe('string');
     }
 });
 

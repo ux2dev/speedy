@@ -24,8 +24,8 @@ final class Payout
         return new self(
             date: $data['date'] ?? null,
             docId: $data['docId'] ?? null,
-            docType: isset($data['docType']) && is_array($data['docType']) ? \Ux2Dev\Speedy\Dto\Model\CODProcessingType::fromArray($data['docType']) : null,
-            paymentType: isset($data['paymentType']) && is_array($data['paymentType']) ? \Ux2Dev\Speedy\Dto\Model\PaymentType::fromArray($data['paymentType']) : null,
+            docType: isset($data['docType']) && is_string($data['docType']) ? \Ux2Dev\Speedy\Dto\Model\CODProcessingType::tryFrom($data['docType']) : null,
+            paymentType: isset($data['paymentType']) && is_string($data['paymentType']) ? \Ux2Dev\Speedy\Dto\Model\PaymentType::tryFrom($data['paymentType']) : null,
             payee: $data['payee'] ?? null,
             currency: $data['currency'] ?? null,
             amount: $data['amount'] ?? null,

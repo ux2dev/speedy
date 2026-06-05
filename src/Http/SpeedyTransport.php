@@ -58,6 +58,54 @@ final class SpeedyTransport
         return $this->sendJson('DELETE', $path, $body, $responseClass);
     }
 
+    /**
+     * POST a request and return the raw response body verbatim. Used for
+     * Speedy's CSV nomenclature dumps which return text/csv on success but
+     * a JSON `{error}` envelope when the caller lacks the licensed-data
+     * permissions — the JSON envelope is decoded here and surfaced as an
+     * ApiException so callers can react (e.g. skip street sync without a
+     * DATAMAP licence).
+     *
+     * @param array<string, mixed> $body
+     */
+    public function postCsv(string $path, array $body = []): string
+    {
+        $response = $this->dispatch('POST', $path, $body);
+        $status   = $response->getStatusCode();
+        $raw      = (string) $response->getBody();
+
+        if ($raw === '') {
+            throw new InvalidResponseException("Empty CSV response body (HTTP {$status})");
+        }
+
+        $contentType = strtolower($response->getHeaderLine('Content-Type'));
+        if (str_contains($contentType, 'application/json')) {
+            try {
+                $decoded = json_decode($raw, true, flags: JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+                throw new InvalidResponseException(
+                    "Malformed JSON envelope on CSV endpoint (HTTP {$status}): " . $e->getMessage(),
+                    previous: $e,
+                );
+            }
+            if (is_array($decoded) && isset($decoded['error']) && is_array($decoded['error']) && $decoded['error'] !== []) {
+                $err = $decoded['error'];
+                throw new ApiException(
+                    'Speedy API error: ' . ($err['message'] ?? 'unknown'),
+                    apiCode: isset($err['code']) ? (int) $err['code'] : null,
+                    apiMessage: isset($err['message']) ? (string) $err['message'] : null,
+                    context: isset($err['context']) ? (string) $err['context'] : null,
+                    errorId: isset($err['id']) ? (string) $err['id'] : null,
+                    component: isset($err['component']) ? (string) $err['component'] : null,
+                    httpStatus: $status,
+                );
+            }
+            throw new InvalidResponseException("Expected text/csv, got JSON without error envelope (HTTP {$status})");
+        }
+
+        return $raw;
+    }
+
     /** @param array<string, mixed> $body */
     public function postBinary(string $path, array $body): PrintResult
     {
@@ -70,6 +118,34 @@ final class SpeedyTransport
         }
 
         $contentType = $response->getHeaderLine('Content-Type') ?: 'application/octet-stream';
+
+        // Speedy streams the file on success but returns a JSON `{error}` envelope
+        // (HTTP 200, application/json) on failure — surface that as an ApiException
+        // instead of handing back an "error PDF".
+        if (str_contains(strtolower($contentType), 'application/json')) {
+            try {
+                $decoded = json_decode($raw, true, flags: JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+                throw new InvalidResponseException(
+                    "Malformed JSON envelope on binary endpoint (HTTP {$status}): " . $e->getMessage(),
+                    previous: $e,
+                );
+            }
+            if (is_array($decoded) && isset($decoded['error']) && is_array($decoded['error']) && $decoded['error'] !== []) {
+                $err = $decoded['error'];
+                throw new ApiException(
+                    'Speedy API error: ' . ($err['message'] ?? 'unknown'),
+                    apiCode: isset($err['code']) ? (int) $err['code'] : null,
+                    apiMessage: isset($err['message']) ? (string) $err['message'] : null,
+                    context: isset($err['context']) ? (string) $err['context'] : null,
+                    errorId: isset($err['id']) ? (string) $err['id'] : null,
+                    component: isset($err['component']) ? (string) $err['component'] : null,
+                    httpStatus: $status,
+                );
+            }
+            throw new InvalidResponseException("Expected binary content, got JSON without error envelope (HTTP {$status})");
+        }
+
         $disposition = $response->getHeaderLine('Content-Disposition');
         $filename    = null;
         if ($disposition !== '' && preg_match('~filename="?([^";]+)"?~', $disposition, $m)) {

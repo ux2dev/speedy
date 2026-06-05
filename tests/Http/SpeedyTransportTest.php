@@ -159,6 +159,20 @@ it('postBinary leaves filename null when no Content-Disposition', function () {
     expect($result->filename)->toBeNull();
 });
 
+it('postBinary surfaces JSON {error} envelopes as ApiException', function () {
+    $client = new FakeHttpClient();
+    // Speedy returns HTTP 200 + application/json on print failure (e.g. a body
+    // without `parcels`) instead of a binary label.
+    $client->queueJson(200, ['error' => [
+        'code'    => 1,
+        'message' => 'System error: getParcels() is null',
+        'id'      => 'EE...',
+    ]]);
+
+    expect(fn () => makeTransport($client)->postBinary('/print', []))
+        ->toThrow(ApiException::class);
+});
+
 it('getJson sends GET method', function () {
     $client = new FakeHttpClient();
     $client->queueJson(200, []);
@@ -175,6 +189,35 @@ it('deleteJson sends DELETE method', function () {
     makeTransport($client)->deleteJson('/x', [], FakeResponse::class);
 
     expect($client->requests[0]->getMethod())->toBe('DELETE');
+});
+
+it('postCsv returns the raw text/csv body verbatim', function () {
+    $client = new FakeHttpClient();
+    $client->queueBinary(200, "id,name\n1,foo\n", 'text/csv;charset=UTF-8');
+
+    $body = makeTransport($client)->postCsv('/location/site/csv/100');
+
+    expect($body)->toBe("id,name\n1,foo\n");
+});
+
+it('postCsv surfaces JSON {error} envelopes as ApiException', function () {
+    $client = new FakeHttpClient();
+    $client->queueJson(200, ['error' => [
+        'code'    => 1,
+        'message' => 'Access to detailed/licensed address nomenclatures required',
+        'id'      => 'EE...',
+    ]]);
+
+    expect(fn () => makeTransport($client)->postCsv('/location/street/csv/100'))
+        ->toThrow(ApiException::class);
+});
+
+it('postCsv throws InvalidResponseException on empty body', function () {
+    $client = new FakeHttpClient();
+    $client->queueBinary(200, '', 'text/csv');
+
+    expect(fn () => makeTransport($client)->postCsv('/location/site/csv/100'))
+        ->toThrow(InvalidResponseException::class);
 });
 
 it('postBinary throws InvalidResponseException on empty body', function () {

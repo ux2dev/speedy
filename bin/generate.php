@@ -31,11 +31,36 @@ const STRIPPED_REQUEST_FIELDS = ['userName', 'password', 'language', 'clientSyst
 
 final class Generator
 {
+    /** @var array<string, true> Names of top-level string-enum schemas; populated in run(). */
+    public static array $stringEnums = [];
+
+    /** @var array<string, true> Names of every schema present in the bundle; populated in run(). */
+    public static array $knownSchemas = [];
+
     public function __construct(
         public readonly string $srcRoot,
         public readonly string $schemaRoot,
         public readonly string $catalogPath,
     ) {
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $allSchemas
+     * @return array<string, true>
+     */
+    private static function detectStringEnums(array $allSchemas): array
+    {
+        $out = [];
+        foreach ($allSchemas as $name => $schema) {
+            if (
+                ($schema['type'] ?? null) === 'string'
+                && isset($schema['enum'])
+                && is_array($schema['enum'])
+            ) {
+                $out[$name] = true;
+            }
+        }
+        return $out;
     }
 
     public function requestRoot(): string   { return $this->srcRoot . '/Dto/Request'; }
@@ -55,7 +80,9 @@ final class Generator
             throw new RuntimeException('endpoints.json must be a JSON array');
         }
 
-        $allSchemas = $this->loadSchemas();
+        $allSchemas         = $this->loadSchemas();
+        self::$stringEnums  = self::detectStringEnums($allSchemas);
+        self::$knownSchemas = array_fill_keys(array_keys($allSchemas), true);
 
         // Wipe outputs (preserve hand-written Resource.php base).
         rmdirRecursive($this->requestRoot());
@@ -76,16 +103,22 @@ final class Generator
         $modelsToEmit = [];
 
         foreach ($catalog as $entry) {
-            $group    = (string) $entry['group'];
-            $reqClass = (string) $entry['request'];
+            $group   = (string) $entry['group'];
+            $returns = (string) ($entry['returns'] ?? 'json');
             $byGroup[$group][] = $entry;
 
+            // CSV bulk endpoints take only path params (no JSON request DTO, no JSON response DTO).
+            if ($returns === 'csv') {
+                continue;
+            }
+
+            $reqClass = (string) $entry['request'];
             if (! isset($allSchemas[$reqClass])) {
                 throw new RuntimeException("Schema {$reqClass} not found in {$this->schemaRoot}");
             }
             $this->emitRequestDto($group, $reqClass, $allSchemas[$reqClass], $modelsToEmit);
 
-            if ($entry['returns'] === 'json') {
+            if ($returns === 'json') {
                 $respClass = (string) $entry['response'];
                 if (! isset($allSchemas[$respClass])) {
                     throw new RuntimeException("Schema {$respClass} not found in {$this->schemaRoot}");
@@ -136,10 +169,23 @@ final class Generator
 
         if (isset($prop['$ref']) && is_string($prop['$ref'])) {
             $model = urnToSimpleName($prop['$ref']);
+            // Speedy ships several $refs whose schema is never published (e.g. OfficeRoutingInformation);
+            // keep the payload as a raw array so the SDK doesn't crash when the API actually returns it.
+            if (! isset(self::$knownSchemas[$model])) {
+                $type = '?array';
+                $from = "isset(\$data[{$keyLit}]) && is_array(\$data[{$keyLit}]) ? \$data[{$keyLit}] : null";
+                $to   = "if (\$this->{$php} !== null) \$out[{$keyLit}] = \$this->{$php};";
+                return [$type, $from, $to];
+            }
             $modelsOut[$model] = true;
             $type = '?\\' . NS_MODEL . '\\' . $model;
-            $from = "isset(\$data[{$keyLit}]) && is_array(\$data[{$keyLit}]) ? \\" . NS_MODEL . "\\{$model}::fromArray(\$data[{$keyLit}]) : null";
-            $to   = "if (\$this->{$php} !== null) \$out[{$keyLit}] = \$this->{$php}->toArray();";
+            if (self::$stringEnums[$model] ?? false) {
+                $from = "isset(\$data[{$keyLit}]) && is_string(\$data[{$keyLit}]) ? \\" . NS_MODEL . "\\{$model}::tryFrom(\$data[{$keyLit}]) : null";
+                $to   = "if (\$this->{$php} !== null) \$out[{$keyLit}] = \$this->{$php}->value;";
+            } else {
+                $from = "isset(\$data[{$keyLit}]) && is_array(\$data[{$keyLit}]) ? \\" . NS_MODEL . "\\{$model}::fromArray(\$data[{$keyLit}]) : null";
+                $to   = "if (\$this->{$php} !== null) \$out[{$keyLit}] = \$this->{$php}->toArray();";
+            }
             return [$type, $from, $to];
         }
 
@@ -149,10 +195,21 @@ final class Generator
             $items = $prop['items'] ?? [];
             if (is_array($items) && isset($items['$ref']) && is_string($items['$ref'])) {
                 $model = urnToSimpleName($items['$ref']);
+                if (! isset(self::$knownSchemas[$model])) {
+                    $type_ = '?array';
+                    $from  = "isset(\$data[{$keyLit}]) && is_array(\$data[{$keyLit}]) ? \$data[{$keyLit}] : null";
+                    $to    = "if (\$this->{$php} !== null) \$out[{$keyLit}] = \$this->{$php};";
+                    return [$type_, $from, $to];
+                }
                 $modelsOut[$model] = true;
                 $type_ = '?array';
-                $from  = "isset(\$data[{$keyLit}]) && is_array(\$data[{$keyLit}]) ? array_map(fn(array \$r) => \\" . NS_MODEL . "\\{$model}::fromArray(\$r), \$data[{$keyLit}]) : null";
-                $to    = "if (\$this->{$php} !== null) \$out[{$keyLit}] = array_map(fn(\\" . NS_MODEL . "\\{$model} \$x) => \$x->toArray(), \$this->{$php});";
+                if (self::$stringEnums[$model] ?? false) {
+                    $from = "isset(\$data[{$keyLit}]) && is_array(\$data[{$keyLit}]) ? array_map(fn(string \$r) => \\" . NS_MODEL . "\\{$model}::tryFrom(\$r), \$data[{$keyLit}]) : null";
+                    $to   = "if (\$this->{$php} !== null) \$out[{$keyLit}] = array_map(fn(\\" . NS_MODEL . "\\{$model} \$x) => \$x->value, \$this->{$php});";
+                } else {
+                    $from = "isset(\$data[{$keyLit}]) && is_array(\$data[{$keyLit}]) ? array_map(fn(array \$r) => \\" . NS_MODEL . "\\{$model}::fromArray(\$r), \$data[{$keyLit}]) : null";
+                    $to   = "if (\$this->{$php} !== null) \$out[{$keyLit}] = array_map(fn(\\" . NS_MODEL . "\\{$model} \$x) => \$x->toArray(), \$this->{$php});";
+                }
                 return [$type_, $from, $to];
             }
             $type_ = '?array';
@@ -268,6 +325,13 @@ PHP;
                 continue;
             }
 
+            if (self::$stringEnums[$name] ?? false) {
+                $code = self::renderStringEnum($name, $allSchemas[$name]);
+                writeFile($this->modelRoot() . '/' . $name . '.php', $code);
+                $emitted[$name] = true;
+                continue;
+            }
+
             $rendered = self::renderModelDto($name, $allSchemas[$name]);
             writeFile($this->modelRoot() . '/' . $name . '.php', $rendered['code']);
             $emitted[$name] = true;
@@ -278,6 +342,32 @@ PHP;
                 }
             }
         }
+    }
+
+    /** @param array<string, mixed> $schema */
+    public static function renderStringEnum(string $name, array $schema): string
+    {
+        $cases = [];
+        foreach ((array) ($schema['enum'] ?? []) as $value) {
+            if (! is_string($value)) continue;
+            // PHP enum cases must be valid identifiers — Speedy's enum values are already screaming-snake-case.
+            $cases[] = "    case {$value} = '{$value}';";
+        }
+        $body = implode("\n", $cases);
+
+        return <<<PHP
+<?php
+
+declare(strict_types=1);
+
+namespace Ux2Dev\\Speedy\\Dto\\Model;
+
+enum {$name}: string
+{
+{$body}
+}
+
+PHP;
     }
 
     // -----------------------------------------------------------------------
@@ -449,14 +539,41 @@ PHP;
         $methodCode = [];
 
         foreach ($methods as $m) {
-            $name     = $m['name'];
-            $path     = $m['path'];
-            $method   = strtoupper($m['method']);
+            $name    = $m['name'];
+            $path    = $m['path'];
+            $method  = strtoupper($m['method']);
+            $returns = $m['returns'] ?? 'json';
+
+            if ($returns === 'csv') {
+                $pathParams = $m['pathParams'] ?? [];
+                $signature  = [];
+                $pathExpr   = "'{$path}'";
+                foreach ($pathParams as $p) {
+                    $signature[] = "int \${$p}";
+                    $pathExpr   .= " . '/' . \${$p}";
+                }
+                $signature[] = '?string $language = null';
+                $signature[] = '?int $clientSystemId = null';
+                $sig = implode(', ', $signature);
+
+                $methodCode[] = <<<PHP
+    public function {$name}({$sig}): string
+    {
+        \$body = [];
+        if (\$language !== null) \$body['language'] = \$language;
+        if (\$clientSystemId !== null) \$body['clientSystemId'] = \$clientSystemId;
+
+        return \$this->transport->postCsv({$pathExpr}, \$body);
+    }
+PHP;
+                continue;
+            }
+
             $reqClass = $m['request'];
             $reqFqn   = NS_REQUEST . '\\' . $group . '\\' . $reqClass;
             $uses[$reqFqn] = true;
 
-            if ($m['returns'] === 'bytes') {
+            if ($returns === 'bytes') {
                 $uses['Ux2Dev\\Speedy\\Http\\PrintResult'] = true;
                 $methodCode[] = <<<PHP
     public function {$name}({$reqClass} \$request, ?string \$language = null, ?int \$clientSystemId = null): PrintResult

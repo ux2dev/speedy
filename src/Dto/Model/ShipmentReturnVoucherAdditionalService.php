@@ -19,7 +19,7 @@ final class ShipmentReturnVoucherAdditionalService
     {
         return new self(
             serviceId: $data['serviceId'] ?? null,
-            payer: isset($data['payer']) && is_array($data['payer']) ? \Ux2Dev\Speedy\Dto\Model\ShipmentRole::fromArray($data['payer']) : null,
+            payer: isset($data['payer']) && is_string($data['payer']) ? \Ux2Dev\Speedy\Dto\Model\ShipmentRole::tryFrom($data['payer']) : null,
             validityPeriod: $data['validityPeriod'] ?? null,
             externalReturnVoucherId: $data['externalReturnVoucherId'] ?? null,
         );
@@ -30,7 +30,7 @@ final class ShipmentReturnVoucherAdditionalService
     {
         $out = [];
         if ($this->serviceId !== null) $out['serviceId'] = $this->serviceId;
-        if ($this->payer !== null) $out['payer'] = $this->payer->toArray();
+        if ($this->payer !== null) $out['payer'] = $this->payer->value;
         if ($this->validityPeriod !== null) $out['validityPeriod'] = $this->validityPeriod;
         if ($this->externalReturnVoucherId !== null) $out['externalReturnVoucherId'] = $this->externalReturnVoucherId;
         return $out;

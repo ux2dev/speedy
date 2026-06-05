@@ -9,8 +9,10 @@ final readonly class PrintVoucherRequest
     public function __construct(
         public readonly ?array $shipmentIds = null,
         public readonly ?string $printerName = null,
-        public readonly ?\Ux2Dev\Speedy\Dto\Model\PrintFormat $format = null,
-        public readonly ?\Ux2Dev\Speedy\Dto\Model\PrintDpi $dpi = null,
+        public readonly ?array $format = null,
+        public readonly ?array $dpi = null,
+        public readonly ?string $paperSize = null,
+        public readonly ?array $parcels = null,
     ) {
     }
 
@@ -20,8 +22,10 @@ final readonly class PrintVoucherRequest
         $out = [];
         if ($this->shipmentIds !== null) $out['shipmentIds'] = $this->shipmentIds;
         if ($this->printerName !== null) $out['printerName'] = $this->printerName;
-        if ($this->format !== null) $out['format'] = $this->format->toArray();
-        if ($this->dpi !== null) $out['dpi'] = $this->dpi->toArray();
+        if ($this->format !== null) $out['format'] = $this->format;
+        if ($this->dpi !== null) $out['dpi'] = $this->dpi;
+        if ($this->paperSize !== null) $out['paperSize'] = $this->paperSize;
+        if ($this->parcels !== null) $out['parcels'] = array_map(fn(\Ux2Dev\Speedy\Dto\Model\ParcelToPrint $x) => $x->toArray(), $this->parcels);
         return $out;
     }
 }

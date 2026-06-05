@@ -23,7 +23,7 @@ final readonly class FindNearestOfficesRequest
         if ($this->distance !== null) $out['distance'] = $this->distance;
         if ($this->limit !== null) $out['limit'] = $this->limit;
         if ($this->officeType !== null) $out['officeType'] = $this->officeType;
-        if ($this->officeFeatures !== null) $out['officeFeatures'] = array_map(fn(\Ux2Dev\Speedy\Dto\Model\OfficeFeature $x) => $x->toArray(), $this->officeFeatures);
+        if ($this->officeFeatures !== null) $out['officeFeatures'] = $this->officeFeatures;
         return $out;
     }
 }

@@ -32,7 +32,7 @@ final class Office
         public readonly ?array $cargoTypesAllowed = null,
         public readonly ?bool $pickUpAllowed = null,
         public readonly ?bool $dropOffAllowed = null,
-        public readonly ?\Ux2Dev\Speedy\Dto\Model\OfficeRoutingInformation $routingInformation = null,
+        public readonly ?array $routingInformation = null,
         public readonly ?bool $cashPaymentAllowed = null,
         public readonly ?bool $cardPaymentAllowed = null,
         public readonly ?bool $palletOffice = null,
@@ -68,7 +68,7 @@ final class Office
             cargoTypesAllowed: isset($data['cargoTypesAllowed']) && is_array($data['cargoTypesAllowed']) ? $data['cargoTypesAllowed'] : null,
             pickUpAllowed: $data['pickUpAllowed'] ?? null,
             dropOffAllowed: $data['dropOffAllowed'] ?? null,
-            routingInformation: isset($data['routingInformation']) && is_array($data['routingInformation']) ? \Ux2Dev\Speedy\Dto\Model\OfficeRoutingInformation::fromArray($data['routingInformation']) : null,
+            routingInformation: isset($data['routingInformation']) && is_array($data['routingInformation']) ? $data['routingInformation'] : null,
             cashPaymentAllowed: $data['cashPaymentAllowed'] ?? null,
             cardPaymentAllowed: $data['cardPaymentAllowed'] ?? null,
             palletOffice: $data['palletOffice'] ?? null,
@@ -104,7 +104,7 @@ final class Office
         if ($this->cargoTypesAllowed !== null) $out['cargoTypesAllowed'] = $this->cargoTypesAllowed;
         if ($this->pickUpAllowed !== null) $out['pickUpAllowed'] = $this->pickUpAllowed;
         if ($this->dropOffAllowed !== null) $out['dropOffAllowed'] = $this->dropOffAllowed;
-        if ($this->routingInformation !== null) $out['routingInformation'] = $this->routingInformation->toArray();
+        if ($this->routingInformation !== null) $out['routingInformation'] = $this->routingInformation;
         if ($this->cashPaymentAllowed !== null) $out['cashPaymentAllowed'] = $this->cashPaymentAllowed;
         if ($this->cardPaymentAllowed !== null) $out['cardPaymentAllowed'] = $this->cardPaymentAllowed;
         if ($this->palletOffice !== null) $out['palletOffice'] = $this->palletOffice;

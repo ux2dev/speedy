@@ -16,7 +16,7 @@ final class ExternalCarrierParcelNumber
     public static function fromArray(array $data): self
     {
         return new self(
-            externalCarrier: isset($data['externalCarrier']) && is_array($data['externalCarrier']) ? \Ux2Dev\Speedy\Dto\Model\ExternalCarrier::fromArray($data['externalCarrier']) : null,
+            externalCarrier: isset($data['externalCarrier']) && is_string($data['externalCarrier']) ? \Ux2Dev\Speedy\Dto\Model\ExternalCarrier::tryFrom($data['externalCarrier']) : null,
             parcelNumber: $data['parcelNumber'] ?? null,
         );
     }
@@ -25,7 +25,7 @@ final class ExternalCarrierParcelNumber
     public function toArray(): array
     {
         $out = [];
-        if ($this->externalCarrier !== null) $out['externalCarrier'] = $this->externalCarrier->toArray();
+        if ($this->externalCarrier !== null) $out['externalCarrier'] = $this->externalCarrier->value;
         if ($this->parcelNumber !== null) $out['parcelNumber'] = $this->parcelNumber;
         return $out;
     }

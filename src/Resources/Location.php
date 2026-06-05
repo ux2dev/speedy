@@ -9,9 +9,6 @@ use Ux2Dev\Speedy\Dto\Request\Location\FindNearestOfficesRequest;
 use Ux2Dev\Speedy\Dto\Request\Location\FindOfficeRequest;
 use Ux2Dev\Speedy\Dto\Request\Location\FindSiteRequest;
 use Ux2Dev\Speedy\Dto\Request\Location\FindStreetRequest;
-use Ux2Dev\Speedy\Dto\Request\Location\GetAllCountriesRequest;
-use Ux2Dev\Speedy\Dto\Request\Location\GetAllSitesRequest;
-use Ux2Dev\Speedy\Dto\Request\Location\GetAllStreetsRequest;
 use Ux2Dev\Speedy\Dto\Request\Location\GetCountryRequest;
 use Ux2Dev\Speedy\Dto\Request\Location\GetOfficeRequest;
 use Ux2Dev\Speedy\Dto\Request\Location\GetSiteRequest;
@@ -49,15 +46,6 @@ final class Location extends Resource
         return $this->transport->postJson('/location/country/getById', $body, GetCountryResponse::class);
     }
 
-    public function getAllCountries(GetAllCountriesRequest $request, ?string $language = null, ?int $clientSystemId = null): FindCountryResponse
-    {
-        $body = $request->toArray();
-        if ($language !== null) $body['language'] = $language;
-        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
-
-        return $this->transport->postJson('/location/country/getAll', $body, FindCountryResponse::class);
-    }
-
     public function findSite(FindSiteRequest $request, ?string $language = null, ?int $clientSystemId = null): FindSiteResponse
     {
         $body = $request->toArray();
@@ -76,15 +64,6 @@ final class Location extends Resource
         return $this->transport->postJson('/location/site/getById', $body, GetSiteResponse::class);
     }
 
-    public function getAllSites(GetAllSitesRequest $request, ?string $language = null, ?int $clientSystemId = null): FindSiteResponse
-    {
-        $body = $request->toArray();
-        if ($language !== null) $body['language'] = $language;
-        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
-
-        return $this->transport->postJson('/location/site/getAll', $body, FindSiteResponse::class);
-    }
-
     public function findStreet(FindStreetRequest $request, ?string $language = null, ?int $clientSystemId = null): FindStreetResponse
     {
         $body = $request->toArray();
@@ -101,15 +80,6 @@ final class Location extends Resource
         if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
 
         return $this->transport->postJson('/location/street/getById', $body, GetStreetResponse::class);
-    }
-
-    public function getAllStreets(GetAllStreetsRequest $request, ?string $language = null, ?int $clientSystemId = null): FindStreetResponse
-    {
-        $body = $request->toArray();
-        if ($language !== null) $body['language'] = $language;
-        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
-
-        return $this->transport->postJson('/location/street/getAll', $body, FindStreetResponse::class);
     }
 
     public function findOffice(FindOfficeRequest $request, ?string $language = null, ?int $clientSystemId = null): FindOfficeResponse
@@ -146,5 +116,77 @@ final class Location extends Resource
         if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
 
         return $this->transport->postJson('/location/address', $body, SearchAddressResponse::class);
+    }
+
+    public function countriesCsv(?string $language = null, ?int $clientSystemId = null): string
+    {
+        $body = [];
+        if ($language !== null) $body['language'] = $language;
+        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
+
+        return $this->transport->postCsv('/location/country/csv', $body);
+    }
+
+    public function sitesCsv(int $countryId, ?string $language = null, ?int $clientSystemId = null): string
+    {
+        $body = [];
+        if ($language !== null) $body['language'] = $language;
+        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
+
+        return $this->transport->postCsv('/location/site/csv' . '/' . $countryId, $body);
+    }
+
+    public function statesCsv(int $countryId, ?string $language = null, ?int $clientSystemId = null): string
+    {
+        $body = [];
+        if ($language !== null) $body['language'] = $language;
+        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
+
+        return $this->transport->postCsv('/location/state/csv' . '/' . $countryId, $body);
+    }
+
+    public function postcodesCsv(int $countryId, ?string $language = null, ?int $clientSystemId = null): string
+    {
+        $body = [];
+        if ($language !== null) $body['language'] = $language;
+        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
+
+        return $this->transport->postCsv('/location/postcode/csv' . '/' . $countryId, $body);
+    }
+
+    public function streetsCsv(int $countryId, ?string $language = null, ?int $clientSystemId = null): string
+    {
+        $body = [];
+        if ($language !== null) $body['language'] = $language;
+        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
+
+        return $this->transport->postCsv('/location/street/csv' . '/' . $countryId, $body);
+    }
+
+    public function complexesCsv(int $countryId, ?string $language = null, ?int $clientSystemId = null): string
+    {
+        $body = [];
+        if ($language !== null) $body['language'] = $language;
+        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
+
+        return $this->transport->postCsv('/location/complex/csv' . '/' . $countryId, $body);
+    }
+
+    public function blocksCsv(int $countryId, ?string $language = null, ?int $clientSystemId = null): string
+    {
+        $body = [];
+        if ($language !== null) $body['language'] = $language;
+        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
+
+        return $this->transport->postCsv('/location/block/csv' . '/' . $countryId, $body);
+    }
+
+    public function poiCsv(int $countryId, ?string $language = null, ?int $clientSystemId = null): string
+    {
+        $body = [];
+        if ($language !== null) $body['language'] = $language;
+        if ($clientSystemId !== null) $body['clientSystemId'] = $clientSystemId;
+
+        return $this->transport->postCsv('/location/poi/csv' . '/' . $countryId, $body);
     }
 }

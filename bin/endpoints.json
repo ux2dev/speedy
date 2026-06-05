@@ -12,7 +12,7 @@
   { "group": "Shipment",     "name": "handoverToMidwayCarrier", "method": "POST", "path": "/shipment/handover-to-midway-carrier", "request": "HandOverToMidwayCarrierRequest", "response": "HandOverToMidwayCarrierResponse", "returns": "json" },
   { "group": "Shipment",     "name": "barcodeInformation",      "method": "POST", "path": "/shipment/barcode-information",        "request": "BarcodeInformationRequest",      "response": "BarcodeInformationResponse",      "returns": "json" },
 
-  { "group": "PrintService", "name": "voucher",                 "method": "POST", "path": "/print",                               "request": "PrintVoucherRequest",            "response": "PrintVoucherResponse",            "returns": "json" },
+  { "group": "PrintService", "name": "voucher",                 "method": "POST", "path": "/print",                               "request": "PrintVoucherRequest",                                                           "returns": "bytes" },
   { "group": "PrintService", "name": "extended",                "method": "POST", "path": "/print/extended",                      "request": "PrintRequest",                   "response": "ExtendedPrintResponse",           "returns": "json" },
   { "group": "PrintService", "name": "labelInfo",               "method": "POST", "path": "/print/labelInfo",                     "request": "LabelInfoRequest",               "response": "LabelInfoResponse",               "returns": "json" },
 
@@ -24,17 +24,23 @@
 
   { "group": "Location",     "name": "findCountry",             "method": "POST", "path": "/location/country",                    "request": "FindCountryRequest",             "response": "FindCountryResponse",             "returns": "json" },
   { "group": "Location",     "name": "getCountry",              "method": "POST", "path": "/location/country/getById",            "request": "GetCountryRequest",              "response": "GetCountryResponse",              "returns": "json" },
-  { "group": "Location",     "name": "getAllCountries",         "method": "POST", "path": "/location/country/getAll",             "request": "GetAllCountriesRequest",         "response": "FindCountryResponse",             "returns": "json" },
   { "group": "Location",     "name": "findSite",                "method": "POST", "path": "/location/site",                       "request": "FindSiteRequest",                "response": "FindSiteResponse",                "returns": "json" },
   { "group": "Location",     "name": "getSite",                 "method": "POST", "path": "/location/site/getById",               "request": "GetSiteRequest",                 "response": "GetSiteResponse",                 "returns": "json" },
-  { "group": "Location",     "name": "getAllSites",             "method": "POST", "path": "/location/site/getAll",                "request": "GetAllSitesRequest",             "response": "FindSiteResponse",                "returns": "json" },
   { "group": "Location",     "name": "findStreet",              "method": "POST", "path": "/location/street",                     "request": "FindStreetRequest",              "response": "FindStreetResponse",              "returns": "json" },
   { "group": "Location",     "name": "getStreet",               "method": "POST", "path": "/location/street/getById",             "request": "GetStreetRequest",               "response": "GetStreetResponse",               "returns": "json" },
-  { "group": "Location",     "name": "getAllStreets",           "method": "POST", "path": "/location/street/getAll",              "request": "GetAllStreetsRequest",           "response": "FindStreetResponse",              "returns": "json" },
   { "group": "Location",     "name": "findOffice",              "method": "POST", "path": "/location/office",                     "request": "FindOfficeRequest",              "response": "FindOfficeResponse",              "returns": "json" },
   { "group": "Location",     "name": "findNearestOffices",      "method": "POST", "path": "/location/office/nearest",             "request": "FindNearestOfficesRequest",      "response": "FindNearestOfficesResponse",      "returns": "json" },
   { "group": "Location",     "name": "getOffice",               "method": "POST", "path": "/location/office/getById",             "request": "GetOfficeRequest",               "response": "GetOfficeResponse",               "returns": "json" },
   { "group": "Location",     "name": "searchAddress",           "method": "POST", "path": "/location/address",                    "request": "SearchAddressRequest",           "response": "SearchAddressResponse",           "returns": "json" },
+
+  { "group": "Location",     "name": "countriesCsv",            "method": "POST", "path": "/location/country/csv",                "pathParams": [],            "returns": "csv" },
+  { "group": "Location",     "name": "sitesCsv",                "method": "POST", "path": "/location/site/csv",                   "pathParams": ["countryId"], "returns": "csv" },
+  { "group": "Location",     "name": "statesCsv",               "method": "POST", "path": "/location/state/csv",                  "pathParams": ["countryId"], "returns": "csv" },
+  { "group": "Location",     "name": "postcodesCsv",            "method": "POST", "path": "/location/postcode/csv",               "pathParams": ["countryId"], "returns": "csv" },
+  { "group": "Location",     "name": "streetsCsv",              "method": "POST", "path": "/location/street/csv",                 "pathParams": ["countryId"], "returns": "csv" },
+  { "group": "Location",     "name": "complexesCsv",            "method": "POST", "path": "/location/complex/csv",                "pathParams": ["countryId"], "returns": "csv" },
+  { "group": "Location",     "name": "blocksCsv",               "method": "POST", "path": "/location/block/csv",                  "pathParams": ["countryId"], "returns": "csv" },
+  { "group": "Location",     "name": "poiCsv",                  "method": "POST", "path": "/location/poi/csv",                    "pathParams": ["countryId"], "returns": "csv" },
 
   { "group": "Calculate",    "name": "calculate",               "method": "POST", "path": "/calculate",                           "request": "CalculationRequest",             "response": "CalculationResponse",             "returns": "json" },
 

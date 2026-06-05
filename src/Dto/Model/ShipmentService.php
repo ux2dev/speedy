@@ -13,7 +13,7 @@ final class ShipmentService
         public readonly ?int $deferredDays = null,
         public readonly ?bool $saturdayDelivery = null,
         public readonly ?bool $autoAdjustPickupDate = null,
-        public readonly ?\Ux2Dev\Speedy\Dto\Model\DeliveryLimitViolationAutoAdjustment $deliveryLimitViolationAutoAdjustment = null,
+        public readonly ?array $deliveryLimitViolationAutoAdjustment = null,
     ) {
     }
 
@@ -27,7 +27,7 @@ final class ShipmentService
             deferredDays: $data['deferredDays'] ?? null,
             saturdayDelivery: $data['saturdayDelivery'] ?? null,
             autoAdjustPickupDate: $data['autoAdjustPickupDate'] ?? null,
-            deliveryLimitViolationAutoAdjustment: isset($data['deliveryLimitViolationAutoAdjustment']) && is_array($data['deliveryLimitViolationAutoAdjustment']) ? \Ux2Dev\Speedy\Dto\Model\DeliveryLimitViolationAutoAdjustment::fromArray($data['deliveryLimitViolationAutoAdjustment']) : null,
+            deliveryLimitViolationAutoAdjustment: isset($data['deliveryLimitViolationAutoAdjustment']) && is_array($data['deliveryLimitViolationAutoAdjustment']) ? $data['deliveryLimitViolationAutoAdjustment'] : null,
         );
     }
 
@@ -41,7 +41,7 @@ final class ShipmentService
         if ($this->deferredDays !== null) $out['deferredDays'] = $this->deferredDays;
         if ($this->saturdayDelivery !== null) $out['saturdayDelivery'] = $this->saturdayDelivery;
         if ($this->autoAdjustPickupDate !== null) $out['autoAdjustPickupDate'] = $this->autoAdjustPickupDate;
-        if ($this->deliveryLimitViolationAutoAdjustment !== null) $out['deliveryLimitViolationAutoAdjustment'] = $this->deliveryLimitViolationAutoAdjustment->toArray();
+        if ($this->deliveryLimitViolationAutoAdjustment !== null) $out['deliveryLimitViolationAutoAdjustment'] = $this->deliveryLimitViolationAutoAdjustment;
         return $out;
     }
 }

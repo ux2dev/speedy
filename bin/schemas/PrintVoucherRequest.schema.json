@@ -30,6 +30,17 @@
     "dpi" : {
       "type" : "object",
       "$ref" : "urn:jsonschema:com:speedy:api:rest:print:PrintDpi"
+    },
+    "paperSize" : {
+      "type" : "string",
+      "enum" : [ "A4", "A6", "A4_4xA6" ]
+    },
+    "parcels" : {
+      "type" : "array",
+      "items" : {
+        "type" : "object",
+        "$ref" : "urn:jsonschema:com:speedy:api:rest:print:model:ParcelToPrint"
+      }
     }
   }
 }

@@ -19,7 +19,7 @@ final class MoneyTransferPremium
         return new self(
             amount: $data['amount'] ?? null,
             amountLocal: $data['amountLocal'] ?? null,
-            payer: isset($data['payer']) && is_array($data['payer']) ? \Ux2Dev\Speedy\Dto\Model\ShipmentRole::fromArray($data['payer']) : null,
+            payer: isset($data['payer']) && is_string($data['payer']) ? \Ux2Dev\Speedy\Dto\Model\ShipmentRole::tryFrom($data['payer']) : null,
         );
     }
 
@@ -29,7 +29,7 @@ final class MoneyTransferPremium
         $out = [];
         if ($this->amount !== null) $out['amount'] = $this->amount;
         if ($this->amountLocal !== null) $out['amountLocal'] = $this->amountLocal;
-        if ($this->payer !== null) $out['payer'] = $this->payer->toArray();
+        if ($this->payer !== null) $out['payer'] = $this->payer->value;
         return $out;
     }
 }

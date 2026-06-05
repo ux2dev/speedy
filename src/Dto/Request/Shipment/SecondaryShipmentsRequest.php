@@ -15,7 +15,7 @@ final readonly class SecondaryShipmentsRequest
     public function toArray(): array
     {
         $out = [];
-        if ($this->types !== null) $out['types'] = array_map(fn(\Ux2Dev\Speedy\Dto\Model\PrimaryShipmentType $x) => $x->toArray(), $this->types);
+        if ($this->types !== null) $out['types'] = array_map(fn(\Ux2Dev\Speedy\Dto\Model\PrimaryShipmentType $x) => $x->value, $this->types);
         return $out;
     }
 }

@@ -19,7 +19,7 @@ final class ShipmentOBPD
         return new self(
             option: $data['option'] ?? null,
             returnShipmentServiceId: $data['returnShipmentServiceId'] ?? null,
-            returnShipmentPayer: isset($data['returnShipmentPayer']) && is_array($data['returnShipmentPayer']) ? \Ux2Dev\Speedy\Dto\Model\ShipmentRole::fromArray($data['returnShipmentPayer']) : null,
+            returnShipmentPayer: isset($data['returnShipmentPayer']) && is_string($data['returnShipmentPayer']) ? \Ux2Dev\Speedy\Dto\Model\ShipmentRole::tryFrom($data['returnShipmentPayer']) : null,
         );
     }
 
@@ -29,7 +29,7 @@ final class ShipmentOBPD
         $out = [];
         if ($this->option !== null) $out['option'] = $this->option;
         if ($this->returnShipmentServiceId !== null) $out['returnShipmentServiceId'] = $this->returnShipmentServiceId;
-        if ($this->returnShipmentPayer !== null) $out['returnShipmentPayer'] = $this->returnShipmentPayer->toArray();
+        if ($this->returnShipmentPayer !== null) $out['returnShipmentPayer'] = $this->returnShipmentPayer->value;
         return $out;
     }
 }

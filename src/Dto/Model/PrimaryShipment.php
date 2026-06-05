@@ -17,7 +17,7 @@ final class PrimaryShipment
     {
         return new self(
             id: $data['id'] ?? null,
-            type: isset($data['type']) && is_array($data['type']) ? \Ux2Dev\Speedy\Dto\Model\PrimaryShipmentType::fromArray($data['type']) : null,
+            type: isset($data['type']) && is_string($data['type']) ? \Ux2Dev\Speedy\Dto\Model\PrimaryShipmentType::tryFrom($data['type']) : null,
         );
     }
 
@@ -26,7 +26,7 @@ final class PrimaryShipment
     {
         $out = [];
         if ($this->id !== null) $out['id'] = $this->id;
-        if ($this->type !== null) $out['type'] = $this->type->toArray();
+        if ($this->type !== null) $out['type'] = $this->type->value;
         return $out;
     }
 }
